@@ -27,7 +27,7 @@ import java.time.Duration;
  * @author malichun
  * @create 2022/6/29 0:57
  */
-public class Test02_MapState_PeriodicPvUv {
+public class Test02_ValueState_PeriodicPvUv {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
