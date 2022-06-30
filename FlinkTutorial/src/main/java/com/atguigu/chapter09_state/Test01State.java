@@ -8,6 +8,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.time.Time;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -27,23 +28,23 @@ public class Test01State {
         env.setParallelism(1);
 
         SingleOutputStreamOperator<Event> stream = env.addSource(new ClickSource())
-            .assignTimestampsAndWatermarks(WatermarkStrategy.<Event>forBoundedOutOfOrderness(Duration.ZERO)
-                .withTimestampAssigner(new SerializableTimestampAssigner<Event>() {
-                    @Override
-                    public long extractTimestamp(Event element, long recordTimestamp) {
-                        return element.timestamp;
-                    }
-                }));
+                .assignTimestampsAndWatermarks(WatermarkStrategy.<Event>forBoundedOutOfOrderness(Duration.ZERO)
+                        .withTimestampAssigner(new SerializableTimestampAssigner<Event>() {
+                            @Override
+                            public long extractTimestamp(Event element, long recordTimestamp) {
+                                return element.timestamp;
+                            }
+                        }));
 
         stream.keyBy(data -> data.user)
-            .flatMap(new MyFlatMapFunction())
-            .print();
+                .flatMap(new MyFlatMapFunction())
+                .print();
 
         env.execute();
     }
 
     // 实现自定义的FlatMapFunction, 用于Keyed State测试
-    public static class MyFlatMapFunction extends RichFlatMapFunction<Event, String>{
+    public static class MyFlatMapFunction extends RichFlatMapFunction<Event, String> {
 
         // 定义状态
         ValueState<Event> myValueState;
@@ -57,9 +58,19 @@ public class Test01State {
 
         @Override
         public void open(Configuration parameters) throws Exception {
-            myValueState = getRuntimeContext().getState(new ValueStateDescriptor<Event>("my-state",Event.class));
-            myListState = getRuntimeContext().getListState(new ListStateDescriptor<Event>("my-list-state",Event.class));
-            myMapState = getRuntimeContext().getMapState(new MapStateDescriptor<String, Long>("my-map-state",String.class, Long.class));
+            ValueStateDescriptor<Event> valueStateDescriptor = new ValueStateDescriptor<>("my-state", Event.class);
+            // 设置过期配置, 只支持处理时间, 机器时间
+            StateTtlConfig ttlConfig = StateTtlConfig
+                    .newBuilder(Time.hours(10))
+                    .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
+                    .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
+                    .build();
+
+            valueStateDescriptor.enableTimeToLive(ttlConfig);
+
+            myValueState = getRuntimeContext().getState(valueStateDescriptor);
+            myListState = getRuntimeContext().getListState(new ListStateDescriptor<Event>("my-list-state", Event.class));
+            myMapState = getRuntimeContext().getMapState(new MapStateDescriptor<String, Long>("my-map-state", String.class, Long.class));
             myReducingState = getRuntimeContext().getReducingState(new ReducingStateDescriptor<Event>("my-reducing-state", new ReduceFunction<Event>() {
                 @Override
                 public Event reduce(Event value1, Event value2) throws Exception {
@@ -75,7 +86,7 @@ public class Test01State {
 
                 @Override
                 public Long add(Event value, Long accumulator) {
-                    return accumulator +1;
+                    return accumulator + 1;
                 }
 
                 @Override
@@ -101,23 +112,22 @@ public class Test01State {
             System.out.println("my list state" + myListState.get());
 
             myListState.add(value);
-            myMapState.put(value.user, myMapState.get(value.user) == null? 1 :myMapState.get(value.user) + 1);
-            System.out.println("my map value: "+myMapState.get(value.user));
+            myMapState.put(value.user, myMapState.get(value.user) == null ? 1 : myMapState.get(value.user) + 1);
+            System.out.println("my map value: " + myMapState.get(value.user));
 
             myAggregateState.add(value);
-            System.out.println("my agg value: "+myAggregateState.get());
+            System.out.println("my agg value: " + myAggregateState.get());
 
             myReducingState.add(value);
-            System.out.println("my reducing state: "+myReducingState.get());
+            System.out.println("my reducing state: " + myReducingState.get());
 
             // 测试本地变量, 不使用状态, 结果: 每来一条任何数据,每来一个会增长一次 +1 (任何key)
             count++;
-            System.out.println("count: "+ count);
+            System.out.println("count: " + count);
 
             // 情况状态
             myValueState.clear();
         }
-
 
 
     }

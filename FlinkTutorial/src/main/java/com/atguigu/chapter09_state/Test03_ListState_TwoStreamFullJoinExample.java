@@ -13,7 +13,7 @@ import org.apache.flink.streaming.api.functions.co.CoProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
-import java.util.stream.Stream;
+
 
 /**
  * 在 Flink SQL 中，支持两条流的全量 Join，语法如下：
