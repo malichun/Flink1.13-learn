@@ -85,6 +85,7 @@ public class Test06_BufferingSinkExample {
 
         @Override
         public void initializeState(FunctionInitializationContext context) throws Exception {
+            // 在这边定义算子状态
             ListStateDescriptor<Event> descriptor = new ListStateDescriptor<Event>(
                     "buffered-elements",
                     Types.POJO(Event.class)
