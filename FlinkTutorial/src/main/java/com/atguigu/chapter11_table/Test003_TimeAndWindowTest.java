@@ -58,15 +58,40 @@ public class Test003_TimeAndWindowTest {
         // 1.分组聚合
         Table aggTable = tableEnv.sqlQuery("select user_name,count(1) from clickTable group by user_name");
 
-        tableEnv.toChangelogStream(aggTable).print("agg");
 
-        // 2. 分组窗口函数, 过期了
-        tableEnv.sqlQuery("select " +
+        // 2. 分组窗口函数, 过期了, 老版本
+        Table tumbleGroupResult = tableEnv.sqlQuery("select " +
             " user_name, count(1) as cnt, " +
             " TUMBLE_END(et, INTERVAL '10' SECOND) AS endT " +
             " from clickTable" +
             " group by user_name,TUMBLE(et, INTERVAL '10' SECOND)");
 
+        // 3. 窗口函数
+        // 3.1 滚动窗口
+        Table tumbleWindowResult = tableEnv.sqlQuery("select user_name, count(1) as cnt, " +
+            " window_end as endT" +
+            " from TABLE(TUMBLE(TABLE clickTable, DESCRIPTOR(et), INTERVAL '10' SECOND)) " +
+            "group by user_name,window_start, window_end");
+
+
+        // 3.2 滑动窗口
+        Table hopWindowResult = tableEnv.sqlQuery("select user_name, count(1) as cnt," +
+            " window_end as endT" +
+            " from TABLE(HOP(TABLE clickTable, DESCRIPTOR(et), INTERVAL '5' SECOND, INTERVAL '10' SECOND)) " +
+            " GROUP BY user_name, window_end, window_start");
+
+        // 3.3 累计窗口
+        Table cumulateWindowResultTable = tableEnv.sqlQuery("select user_name, count(1) as cnt," +
+            " window_end as endT" +
+            " from TABLE(CUMULATE(TABLE clickTable, DESCRIPTOR(et), INTERVAL '5' SECOND, INTERVAL '10' SECOND))" +
+            " GROUP BY user_name, window_end, window_start");
+
+
+        //tableEnv.toChangelogStream(aggTable).print("agg");
+        //tableEnv.toChangelogStream(tumbleGroupResult).print("group window");
+        //tableEnv.toChangelogStream(tumbleWindowResult).print("tumble window");
+        //tableEnv.toChangelogStream(hopWindowResult).print("hop window");
+        tableEnv.toChangelogStream(cumulateWindowResultTable).print("cumulate window");
 
         env.execute();
     }
