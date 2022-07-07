@@ -86,12 +86,21 @@ public class Test003_TimeAndWindowTest {
             " from TABLE(CUMULATE(TABLE clickTable, DESCRIPTOR(et), INTERVAL '5' SECOND, INTERVAL '10' SECOND))" +
             " GROUP BY user_name, window_end, window_start");
 
+        // 4. 开窗聚合(over)
+        // 统计每个用户之前3次访问的平均时间戳
+        Table overWindowResult = tableEnv.sqlQuery("select user_name, " +
+            " avg(ts) over(PARTITION BY user_name order by et rows between 3 preceding and current row) as avg_ts " +
+            " from clickTable");
+
+
+
 
         //tableEnv.toChangelogStream(aggTable).print("agg");
         //tableEnv.toChangelogStream(tumbleGroupResult).print("group window");
         //tableEnv.toChangelogStream(tumbleWindowResult).print("tumble window");
         //tableEnv.toChangelogStream(hopWindowResult).print("hop window");
-        tableEnv.toChangelogStream(cumulateWindowResultTable).print("cumulate window");
+        //tableEnv.toChangelogStream(cumulateWindowResultTable).print("cumulate window");
+        tableEnv.toDataStream(overWindowResult).print("over window: ");
 
         env.execute();
     }
