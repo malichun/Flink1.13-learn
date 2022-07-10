@@ -25,7 +25,10 @@ import java.text.SimpleDateFormat;
  *程 序: mockLog -> Nginx -> Logger.sh -> kafka(ZK) -> BaseLogApp -> Kafka(dwd_page_log主题)    -> UniqueVisitApp -> Kafka
  *
  * UV测试数据
- *
+ *  {"common":{"ar":"230000","ba":"iPhone","ch":"Appstore","is_new":"0","md":"iPhone 8","mid":"mid_3","os":"iOS 13.2.3","uid":"36","vc":"v2.1.134"},
+ *   "page":{"during_time":8327,"item":"6,7","item_type":"sku_ids","last_page_id":"cart","page_id":"trade"},
+ *   "ts":1608267415000
+ *   }
  *
  * @author malichun
  * @create 2022/07/10 0010 23:34
