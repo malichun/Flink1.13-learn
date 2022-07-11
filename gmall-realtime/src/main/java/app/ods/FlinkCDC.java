@@ -16,6 +16,8 @@ import utils.MyKafkaUtil;
 import java.util.Properties;
 
 /**
+ *
+ * 采集mysql的binlog,将数据写入 ods_base_db 的kafka主题中
  * @author malichun
  * @create 2022/07/09 0009 22:29
  */
