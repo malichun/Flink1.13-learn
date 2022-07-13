@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import utils.DimUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -50,12 +51,22 @@ public class DimSinkFunction extends RichSinkFunction<JSONObject> {
         PreparedStatement preparedStatement = null;
         try {
             // 1. 获取sql语句
+            // phoenix表名
+            String sinkTable = value.getString("sinkTable");
+            JSONObject after = value.getJSONObject("after");
             String upsertSql = genUpsertSql(
-                value.getString("sinkTable"), // phoenix表名
-                value.getJSONObject("after") // 字段
+                sinkTable, // phoenix表名
+                after // 字段
             );
             System.out.println(upsertSql);
             preparedStatement = connection.prepareStatement(upsertSql);
+
+            // FIXME: 这边为了一致性问题, 下面redis可以不删, 直接更新redis一份
+            // 判断如果当前数据为update, 则先删除redis中的数据
+            if("update".equals(value.getString("type"))) {
+                DimUtil.delRedisDimInfo(value.getString("sinkTable").toUpperCase(), after.getString("id"));
+            }
+            // 维度的数据更次年不多, 直接写一份数据
 
             // 3.执行插入操作
             preparedStatement.executeUpdate();

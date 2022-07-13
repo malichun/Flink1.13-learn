@@ -98,7 +98,18 @@ public class OrderWideApp {
         //打印测试
         orderWideWithNoDimDS.print("orderWideWithNoDimDS ");
 
-        // TODO 4.关联维度信息
+        // TODO 4.关联维度信息 Hbase Phoenix
+        orderWideWithNoDimDS.map(orderWide -> {
+            // 关联用户维度
+            Long user_id = orderWide.getUser_id();
+
+            // 根据user_id查询phoenix用户信息
+
+            // 将用户信息补充至orderWide
+
+            // 返回结果
+            return orderWide;
+        });
 
 
 
