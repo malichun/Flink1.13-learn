@@ -187,6 +187,8 @@ public class TableProcessFunction extends BroadcastProcessFunction<JSONObject, S
                 ctx.output(hbaseTag, value);
             }
         } else {
+
+            // FIXME 如果这边第一次没有找到, 则在这边查询一下mysql, 或者在open的时候 加载mysql里面的数据,加载到map
             System.out.println("该组合key " + key + " 不存在!");
         }
 
