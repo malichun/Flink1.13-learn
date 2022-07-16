@@ -72,7 +72,7 @@ public class UserJumpDetailApp {
 
         // TODO 3.将每行数据转换为JSON对象并提取时间戳生成watermark
         SingleOutputStreamOperator<JSONObject> jsonObjDS = kafkaDS.map(JSON::parseObject).assignTimestampsAndWatermarks(
-            WatermarkStrategy.<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(2))
+            WatermarkStrategy.<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                 .withTimestampAssigner(new SerializableTimestampAssigner<JSONObject>() {
                     @Override
                     public long extractTimestamp(JSONObject element, long recordTimestamp) {
