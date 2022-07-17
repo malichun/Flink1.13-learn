@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 第四章. 订单宽表
+ *
+ * 主要: 订单+订单明细
  *  数据流: WebApp -> nginx -> SpringBOot -> MySql -> FlinkApp -> Kafka(ods) -> FlinkApp -> Kafka/Hbase(dwd-dim) -> FlinkApp(redis) -> Kafka(dwm)
  *
  *  程序:     MockDb                     -> Mysql  -> FlinkCDC -> Kafka(zk) -> BaseDbApp -> Kafka/Phoenix(zk/hdfs/hbase) -> OrderWideApp(redis) -> Kafka

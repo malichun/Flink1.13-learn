@@ -15,11 +15,12 @@ import org.apache.flink.util.Collector;
 import utils.DateTimeUtil;
 import utils.MyKafkaUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * 第5章 支付宽表
+ *
+ * 主要: dwm层的订单+订单明细的表 join 支付表
+ *
  *  数据流: WebApp -> nginx -> SpringBOot -> MySql -> FlinkApp -> Kafka(ods) -> FlinkApp -> Kafka/Hbase(dwd-dim) -> FlinkApp(redis) -> Kafka(dwm) -> FlinkApp -> Kafka(dwm)
  *
  *  程序:     MockDb                     -> Mysql  -> FlinkCDC -> Kafka(zk) -> BaseDbApp -> Kafka/Phoenix(zk/hdfs/hbase) -> OrderWideApp(redis) -> Kafka -> PaymentWideApp -> Kafka
