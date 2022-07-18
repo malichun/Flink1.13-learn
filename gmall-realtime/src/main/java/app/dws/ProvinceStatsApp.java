@@ -7,6 +7,7 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
+import utils.ClickhouseUtil;
 import utils.MyKafkaUtil;
 
 /**
@@ -89,11 +90,12 @@ public class ProvinceStatsApp {
         Table table = tableEnv.sqlQuery(sql);
 
         // TODO 4.将动态表转换为流, 使用AppendStream
+        // FIXME 使用 toDataStream会有类型问题, 待解决(BigDecimal类型)
         DataStream<ProvinceStats> provinceStatsDataStream = tableEnv.toAppendStream(table, ProvinceStats.class);
 
         // TODO 5.打印数据并写入clickhouse
         provinceStatsDataStream.print();
-
+        provinceStatsDataStream.addSink(ClickhouseUtil.getSink("insert into province_stats_2021 values(?,?,?,?,?,?,?,?,?,?)"));
 
         // TODO 6.启动任务
         env.execute();
