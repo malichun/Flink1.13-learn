@@ -56,4 +56,14 @@ public class MyKafkaUtil {
 
         return new FlinkKafkaConsumer<String>(topic, new SimpleStringSchema(),properties);
     }
+
+    // 拼接kafka属性
+    public static String getKafkaDDL(String topic, String groupId) {
+        return  "  'connector' = 'kafka',\n" +
+                "  'topic' = '"+ topic +"',\n" +
+                "  'properties.bootstrap.servers' = '"+brokers+"',\n" +
+                "  'properties.group.id' = '" + groupId + "',\n" +
+                "  'scan.startup.mode' = 'latest-offset',\n" +
+                "  'format' = 'json'\n" ;
+    }
 }
