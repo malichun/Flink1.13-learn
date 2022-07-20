@@ -154,6 +154,13 @@
             <artifactId>flink-table-planner-blink_${scala.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
+
+        <!--切词工具-->
+        <dependency>
+            <groupId>com.janeluo</groupId>
+            <artifactId>ikanalyzer</artifactId>
+            <version>2012_u6</version>
+        </dependency>
     </dependencies>
 
     <build>
