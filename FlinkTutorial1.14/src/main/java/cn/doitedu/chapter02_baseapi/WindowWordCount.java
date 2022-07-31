@@ -17,8 +17,9 @@ import java.util.Arrays;
  */
 public class WindowWordCount {
     public static void main(String[] args) throws Exception{
-        Configuration configuration = new Configuration();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
+        Configuration conf = new Configuration();
+        conf.setInteger("rest.port",8081);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
 
         SingleOutputStreamOperator<Tuple2<String, Integer>> dataStream = env.socketTextStream("hadoop01", 6666)
             .flatMap(new Splitter())
