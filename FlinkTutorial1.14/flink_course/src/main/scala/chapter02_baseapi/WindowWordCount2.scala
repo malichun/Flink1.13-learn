@@ -1,4 +1,4 @@
-package cn.doitedu.chapter02_baseapi
+package chapter02_baseapi
 
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.scala._
