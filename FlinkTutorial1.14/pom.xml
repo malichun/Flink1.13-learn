@@ -18,7 +18,6 @@
         <flink.version>1.14.4</flink.version>
     </properties>
 
-    <packing>pom</packing>
 
     <dependencies>
         <dependency>
