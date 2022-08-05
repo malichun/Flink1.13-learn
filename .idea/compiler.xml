@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="gmall-realtime" />
         <module name="gmall-logger" />
+        <module name="flink_course" />
         <module name="flume-demo" />
         <module name="flink-cdc" />
         <module name="FlinkTutorial" />
@@ -16,7 +17,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="flink-cdc" target="1.8" />
+      <module name="flink_course" target="1.8" />
       <module name="FlinkTutorial" target="1.8" />
+      <module name="FlinkTutorial1.14" target="1.8" />
       <module name="flume-demo" target="1.8" />
       <module name="gmall-logger" target="1.8" />
       <module name="gmall-realtime" target="1.8" />

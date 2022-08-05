@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FlinkTutorial/FlinkTutorial.iml" filepath="$PROJECT_DIR$/FlinkTutorial/FlinkTutorial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FlinkTutorial1.14/FlinkTutorial1.14.iml" filepath="$PROJECT_DIR$/FlinkTutorial1.14/FlinkTutorial1.14.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-cdc/flink-cdc.iml" filepath="$PROJECT_DIR$/flink-cdc/flink-cdc.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-learn.iml" filepath="$PROJECT_DIR$/flink-learn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FlinkTutorial1.14/flink_course/flink_course.iml" filepath="$PROJECT_DIR$/FlinkTutorial1.14/flink_course/flink_course.iml" />
       <module fileurl="file://$PROJECT_DIR$/flume-demo/flume-demo.iml" filepath="$PROJECT_DIR$/flume-demo/flume-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-logger/gmall-logger.iml" filepath="$PROJECT_DIR$/gmall-logger/gmall-logger.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-realtime/gmall-realtime.iml" filepath="$PROJECT_DIR$/gmall-realtime/gmall-realtime.iml" />

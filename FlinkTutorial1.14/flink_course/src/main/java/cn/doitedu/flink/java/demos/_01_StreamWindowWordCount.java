@@ -1,4 +1,4 @@
-package cn.doitedu.chapter02_baseapi;
+package cn.doitedu.flink.java.demos;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @author malc
  * @create 2022/7/29 0029 11:41
  */
-public class WindowWordCount {
+public class _01_StreamWindowWordCount {
     public static void main(String[] args) throws Exception{
         Configuration conf = new Configuration();
         conf.setInteger("rest.port",8081);

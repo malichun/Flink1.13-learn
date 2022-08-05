@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/gmall-logger/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-realtime/pom.xml" />
         <option value="$PROJECT_DIR$/flume-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/FlinkTutorial1.14/pom.xml" />
       </list>
     </option>
   </component>
