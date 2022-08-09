@@ -21,6 +21,7 @@ public class Demo6_Exercise {
         TableEnvironment tenv = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
 
         // 建表(数据源表)
+        // {"id":4, "name": "zs", "nick":"tiedan", "age": 18, "gender": "男"}
         tenv.executeSql(
             "create table t_person (                         \n" +
             "    id int,                                               \n" +
