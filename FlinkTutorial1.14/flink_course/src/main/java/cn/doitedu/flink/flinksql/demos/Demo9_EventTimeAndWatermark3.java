@@ -1,39 +1,36 @@
 package cn.doitedu.flink.flinksql.demos;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.Schema;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.types.Row;
+import org.apache.flink.util.Collector;
+
+import java.time.Duration;
 
 /**
- * watermark 在DDL中的定义示例代码
- *
- * 测试数据
- * {"guid":1, "eventId":"e02", "eventTime":1655017433000, "pageId":"p001"} // epoch Time
- * {"guid":1, "eventId":"e03", "eventTime":1655017434000, "pageId":"p001"}
- * {"guid":1, "eventId":"e04", "eventTime":1655017435000, "pageId":"p001"}
- * {"guid":1, "eventId":"e05", "eventTime":1655017436000, "pageId":"p001"}
- * {"guid":1, "eventId":"e06", "eventTime":1655017437000, "pageId":"p001"}
- * {"guid":1, "eventId":"e07", "eventTime":1655017438000, "pageId":"p001"}
- * {"guid":1, "eventId":"e08", "eventTime":1655017439000, "pageId":"p001"}
- *
- * 定义表的时候要素:
- *      1. timestamp类型的字段
- *      2. watermark for...
- *
- * @author malc
- * @create 2022/8/10 0010 20:42
+ * 表转流
+ * {"guid":1, "eventId":"e02","eventTime":1655015710000, "pageId":"p001"}
  */
-public class Demo9_EventTimeAndWatermark {
-    public static void main(String[] args) {
+public class Demo9_EventTimeAndWatermark3 {
+    public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
 
 
-        StreamTableEnvironment tenv = StreamTableEnvironment.create(env, EnvironmentSettings.inStreamingMode());
+        EnvironmentSettings settings = EnvironmentSettings.inStreamingMode();
+        StreamTableEnvironment tenv = StreamTableEnvironment.create(env, settings);
 
-        /**
-         * 只有 TIMESTAMP 或 TIMESTAMP_LTZ 类型的字段可以被生命为rowtime(事件时间属性)
-         *
-         */
         tenv.executeSql("create table t_events(\n" +
             "    guid int,\n" +
             "    eventId string,\n" +
@@ -47,7 +44,7 @@ public class Demo9_EventTimeAndWatermark {
             "with (\n" +
             " 'connector' = 'kafka',                                    "
             + " 'topic' = 'doit30-events2',                                     "
-            + " 'properties.bootstrap.servers' = 'hadoop02:9092',        "
+            + " 'properties.bootstrap.servers' = 'hadoop102:9092',        "
             + " 'properties.group.id' = 'g1',                             "
             + " 'format' = 'json',                                        "
             + " 'json.fail-on-missing-field' = 'false',                   "
@@ -56,8 +53,16 @@ public class Demo9_EventTimeAndWatermark {
             + ")                                                          "
         );
 
-        tenv.executeSql("desc t_events").print();
+        DataStream<Row> ds = tenv.toDataStream(tenv.from("t_events"));
 
-        tenv.executeSql("select guid,eventId, eventTime,pageId,pt, rt, current_watermark(rt) as wm from t_events").print();
+        ds.process(new ProcessFunction<Row, Object>() {
+            @Override
+            public void processElement(Row value, ProcessFunction<Row, Object>.Context ctx, Collector<Object> out) throws Exception {
+                out.collect(value + " => " + ctx.timerService().currentWatermark());
+            }
+        }).print();
+
+        env.execute();
+
     }
 }
