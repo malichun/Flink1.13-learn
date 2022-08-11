@@ -8,7 +8,7 @@ import org.apache.flink.table.api.TableEnvironment;
  * @author malichun
  * @create 2022/08/10 0010 1:00
  */
-public class Demo9_CsvFormat {
+public class Demo8_CsvFormat {
     public static void main(String[] args) {
         TableEnvironment tenv = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
 
