@@ -90,7 +90,59 @@ public class Demo16_TimeWindowDemo {
             "    table(CUMULATE(table t_bid, descriptor(rt), interval '2' minutes, interval '24' hour))\n" +
             "group by \n" +
             "    window_start, window_end"
-        ).print();
+        )/* .print() */;
+
+
+        // 每10分钟计算一次最近10分钟内交易总额最大的前3个供应商及其交易单数
+        tenv.executeSql("select\n" +
+            "    window_start,\n" +
+            "    window_end, \n" +
+            "    supplier_id,\n" +
+            "    price_amt,\n" +
+            "    bit_cnt\n" +
+            "from \n" +
+            "(\n" +
+            "    select\n" +
+            "        window_start,\n" +
+            "        window_end,\n" +
+            "        supplier_id,\n" +
+            "        price_amt,\n" +
+            "        bit_cnt,\n" +
+            "        row_number() over(partition by window_start, window_end order by price_amt desc) as rn\n" +
+            "    from \n" +
+            "    (\n" +
+            "        SELECT\n" +
+            "            window_start, \n" +
+            "            window_end, \n" +
+            "            supplier_id,\n" +
+            "            sum(price) as price_amt,\n" +
+            "            count(1) as bit_cnt\n" +
+            "        from \n" +
+            "            table(\n" +
+            "                tumble(table t_bid, descriptor(rt), interval '10' minutes)\n" +
+            "            )\n" +
+            "        group by \n" +
+            "            window_start, window_end, supplier_id\n" +
+            "    ) t\n" +
+            ") t where rn <= 3")/* .print() */;
+
+        //
+        tenv.executeSql("SELECT\n" +
+            "    *\n" +
+            "from \n" +
+            "(\n" +
+            "select\n" +
+            "    bidtime,\n" +
+            "    price,\n" +
+            "    item,\n" +
+            "    supplier_id,\n" +
+            "    row_number() over(partition by window_start, window_end order by price desc ) as rn\n" +
+            "from \n" +
+            "    table(tumble(table t_bid,descriptor(rt),interval '10' minute))\n" +
+            ") \n" +
+            "where rn <= 2")
+            .print();
+        ;
 
     }
 
