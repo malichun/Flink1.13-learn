@@ -130,8 +130,16 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.21</version>
+            <version>5.1.47</version>
         </dependency>
+
+        <!--flink-cdc-->
+        <dependency>
+            <artifactId>flink-sql-connector-mysql-cdc</artifactId>
+            <groupId>com.ververica</groupId>
+            <version>2.3-doitedu</version>
+        </dependency>
+
     </dependencies>
 
 </project>
