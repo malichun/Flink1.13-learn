@@ -126,7 +126,7 @@ public class Demo16_TimeWindowDemo {
             "    ) t\n" +
             ") t where rn <= 3")/* .print() */;
 
-        //
+        // 在滚动窗口上, 直接求TOPN
         tenv.executeSql("SELECT\n" +
             "    *\n" +
             "from \n" +
