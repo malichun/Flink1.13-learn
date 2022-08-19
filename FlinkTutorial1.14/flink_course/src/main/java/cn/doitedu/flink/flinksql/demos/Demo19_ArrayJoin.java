@@ -26,7 +26,8 @@ public class Demo19_ArrayJoin {
             DataTypes.FIELD("tags", DataTypes.ARRAY(
                 DataTypes.STRING()
             ))
-        ),row("1","zs",array("stu", "child"))
+        ),
+            row("1","zs",array("stu", "child"))
             ,row("2","bb", array("miss"))
         );
 
