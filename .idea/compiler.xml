@@ -8,14 +8,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gmall-realtime" />
-        <module name="gmall-logger" />
         <module name="flink_course" />
-        <module name="flume-demo" />
+        <module name="datagen" />
         <module name="flink-cdc" />
         <module name="FlinkTutorial" />
+        <module name="gmall-logger" />
+        <module name="flume-demo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="datagen" target="1.8" />
       <module name="flink-cdc" target="1.8" />
       <module name="flink_course" target="1.8" />
       <module name="FlinkTutorial" target="1.8" />

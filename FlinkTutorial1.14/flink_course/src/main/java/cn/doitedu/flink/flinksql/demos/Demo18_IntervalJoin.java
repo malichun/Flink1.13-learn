@@ -12,7 +12,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
  * @author malichun
  * @create 2022/08/17 0017 23:24
  */
-public class Demo18IntervalJoin {
+public class Demo18_IntervalJoin {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
