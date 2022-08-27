@@ -37,7 +37,7 @@ public class _07_Transformation_Demos {
         );*/
 
 
-        DataStreamSource<String> streamSource = env.readTextFile("flink_course/data/transformation_input/");
+        DataStreamSource<String> streamSource = env.readTextFile("D:\\projects\\learn_projects\\flink-learn\\FlinkTutorial1.14\\flink_course\\data\\transformation_input\\userinfo.txt");
 
 
         /**

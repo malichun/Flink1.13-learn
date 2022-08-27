@@ -44,151 +44,153 @@ public class _06_CustomSourceFunction {
         env.execute();
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class EventLog{
-        private long guid;
-        private String sessionId;
-        private String eventId;
-        private long timestamp;
-        private Map<String,String> eventInfo;
+
+}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class EventLog{
+    private long guid;
+    private String sessionId;
+    private String eventId;
+    private long timestamp;
+    private Map<String,String> eventInfo;
+}
+
+/**
+ * 我的source组件, 要产生的数据是 EventLog 对象
+ */
+class MySourceFunction implements SourceFunction<EventLog>{
+
+    volatile boolean flag = true;
+
+    String[] events = {"appLaunch", "pageLoad", "adShow", "adClick", "share", "itemCollect", "putBack", "wakeUp", "appClose"};
+
+    Map<String, String> eventInfoMap = new HashMap<>();
+
+    @Override
+    public void run(SourceContext<EventLog> ctx) throws Exception {
+        EventLog eventLog = new EventLog();
+        while(flag){
+
+            eventLog.setGuid(RandomUtils.nextLong(1, 1000));
+            eventLog.setSessionId(RandomStringUtils.randomAlphabetic(1024).toUpperCase());
+            eventLog.setTimestamp(System.currentTimeMillis());
+            eventLog.setEventId(events[RandomUtils.nextInt(0, events.length)]);
+
+            eventInfoMap.put(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomAlphabetic(2));
+            eventLog.setEventInfo(eventInfoMap);
+
+            ctx.collect(eventLog);
+
+            eventInfoMap.clear();
+
+            Thread.sleep(RandomUtils.nextInt(5, 1500));
+        }
+    }
+
+    @Override
+    public void cancel() {
+        flag = false;
+    }
+}
+
+
+class MyRichSourceFunction extends RichSourceFunction<EventLog>{
+
+    volatile boolean flag = true;
+
+    String[] events = {"appLaunch", "pageLoad", "adShow", "adClick", "share", "itemCollect", "putBack", "wakeUp", "appClose"};
+
+    Map<String, String> eventInfoMap = new HashMap<>();
+
+    /**
+     * source组件初始化
+     * @param parameters
+     * @throws Exception
+     */
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        // 初始化的东西
+        RuntimeContext runtimeContext = getRuntimeContext();
+
+        // 可以从运行时上下文中取到本算子所属的task的task名
+        String taskName = runtimeContext.getTaskName();
+
+        // 可以从运行时上下文中欧, 取到本算子所属的subTask的subTaskId
+        int indexOfThisSubtask = runtimeContext.getIndexOfThisSubtask();
+
     }
 
     /**
-     * 我的source组件, 要产生的数据是 EventLog 对象
+     * source组件生成数据的过程(核心工作逻辑)
+     * @param ctx
+     * @throws Exception
      */
-    public static class MySourceFunction implements SourceFunction<EventLog>{
+    @Override
+    public void run(SourceContext<EventLog> ctx) throws Exception {
+        EventLog eventLog = new EventLog();
+        while(flag){
 
-        volatile boolean flag = true;
+            eventLog.setGuid(RandomUtils.nextLong(1, 1000));
+            eventLog.setSessionId(RandomStringUtils.randomAlphabetic(12).toUpperCase());
+            eventLog.setTimestamp(System.currentTimeMillis());
+            eventLog.setEventId(events[RandomUtils.nextInt(0, events.length)]);
 
-        String[] events = {"appLaunch", "pageLoad", "adShow", "adClick", "share", "itemCollect", "putBack", "wakeUp", "appClose"};
+            eventInfoMap.put(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomAlphabetic(2));
+            eventLog.setEventInfo(eventInfoMap);
 
-        Map<String, String> eventInfoMap = new HashMap<>();
+            ctx.collect(eventLog);
 
-        @Override
-        public void run(SourceContext<EventLog> ctx) throws Exception {
-            EventLog eventLog = new EventLog();
-            while(flag){
+            eventInfoMap.clear();
 
-                eventLog.setGuid(RandomUtils.nextLong(1, 1000));
-                eventLog.setSessionId(RandomStringUtils.randomAlphabetic(12).toUpperCase());
-                eventLog.setTimestamp(System.currentTimeMillis());
-                eventLog.setEventId(events[RandomUtils.nextInt(0, events.length)]);
-
-                eventInfoMap.put(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomAlphabetic(2));
-                eventLog.setEventInfo(eventInfoMap);
-
-                ctx.collect(eventLog);
-
-                eventInfoMap.clear();
-
-                Thread.sleep(RandomUtils.nextInt(500, 1500));
-            }
-        }
-
-        @Override
-        public void cancel() {
-            flag = false;
+            Thread.sleep(RandomUtils.nextInt(500, 1500));
         }
     }
 
-
-    public static class MyRichSourceFunction extends RichSourceFunction<EventLog>{
-
-        volatile boolean flag = true;
-
-        String[] events = {"appLaunch", "pageLoad", "adShow", "adClick", "share", "itemCollect", "putBack", "wakeUp", "appClose"};
-
-        Map<String, String> eventInfoMap = new HashMap<>();
-
-        /**
-         * source组件初始化
-         * @param parameters
-         * @throws Exception
-         */
-        @Override
-        public void open(Configuration parameters) throws Exception {
-            // 初始化的东西
-            RuntimeContext runtimeContext = getRuntimeContext();
-
-            // 可以从运行时上下文中取到本算子所属的task的task名
-            String taskName = runtimeContext.getTaskName();
-
-            // 可以从运行时上下文中欧, 取到本算子所属的subTask的subTaskId
-            int indexOfThisSubtask = runtimeContext.getIndexOfThisSubtask();
-
-        }
-
-        /**
-         * source组件生成数据的过程(核心工作逻辑)
-         * @param ctx
-         * @throws Exception
-         */
-        @Override
-        public void run(SourceContext<EventLog> ctx) throws Exception {
-            EventLog eventLog = new EventLog();
-            while(flag){
-
-                eventLog.setGuid(RandomUtils.nextLong(1, 1000));
-                eventLog.setSessionId(RandomStringUtils.randomAlphabetic(12).toUpperCase());
-                eventLog.setTimestamp(System.currentTimeMillis());
-                eventLog.setEventId(events[RandomUtils.nextInt(0, events.length)]);
-
-                eventInfoMap.put(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomAlphabetic(2));
-                eventLog.setEventInfo(eventInfoMap);
-
-                ctx.collect(eventLog);
-
-                eventInfoMap.clear();
-
-                Thread.sleep(RandomUtils.nextInt(500, 1500));
-            }
-        }
-
-        /**
-         * job取消调用的方法
-         */
-        @Override
-        public void cancel() {
-            flag = false;
-        }
-
-        /**
-         * 组件关闭调用的方法
-         * @throws Exception
-         */
-        @Override
-        public void close() throws Exception {
-            System.out.println("组件被关闭了");
-        }
+    /**
+     * job取消调用的方法
+     */
+    @Override
+    public void cancel() {
+        flag = false;
     }
 
-    // 并行的
-    public static class MyParallelSourceFunction implements ParallelSourceFunction<EventLog> {
+    /**
+     * 组件关闭调用的方法
+     * @throws Exception
+     */
+    @Override
+    public void close() throws Exception {
+        System.out.println("组件被关闭了");
+    }
+}
 
-        @Override
-        public void run(SourceContext<EventLog> ctx) throws Exception {
+// 并行的
+ class MyParallelSourceFunction implements ParallelSourceFunction<EventLog> {
 
-        }
+    @Override
+    public void run(SourceContext<EventLog> ctx) throws Exception {
 
-        @Override
-        public void cancel() {
-
-        }
     }
 
-    // 并行的
-    public static class MyRichParallelSourceFunction extends RichParallelSourceFunction<EventLog> {
+    @Override
+    public void cancel() {
 
-        @Override
-        public void run(SourceContext<EventLog> ctx) throws Exception {
+    }
+}
 
-        }
+// 并行的
+class MyRichParallelSourceFunction extends RichParallelSourceFunction<EventLog> {
 
-        @Override
-        public void cancel() {
+    @Override
+    public void run(SourceContext<EventLog> ctx) throws Exception {
 
-        }
+    }
+
+    @Override
+    public void cancel() {
+
     }
 }
