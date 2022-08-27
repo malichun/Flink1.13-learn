@@ -15,6 +15,7 @@ import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunctio
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,16 +48,6 @@ public class _06_CustomSourceFunction {
 
 }
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class EventLog{
-    private long guid;
-    private String sessionId;
-    private String eventId;
-    private long timestamp;
-    private Map<String,String> eventInfo;
-}
 
 /**
  * 我的source组件, 要产生的数据是 EventLog 对象
