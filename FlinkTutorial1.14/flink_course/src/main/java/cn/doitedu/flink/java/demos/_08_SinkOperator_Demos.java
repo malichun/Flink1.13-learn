@@ -25,6 +25,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.
 import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.OnCheckpointRollingPolicy;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -114,7 +115,7 @@ public class _08_SinkOperator_Demos {
          *
          */
         // TODO 方式 1： 手动构造schema，来生成ParquetAvroWriter工厂
-       /*  Schema schema = Schema.createRecord("id", "用户id", "cn.doitedu.User", true);
+     /*    Schema schema = Schema.createRecord("id", "用户id", "cn.doitedu.User", true);
         ParquetWriterFactory<GenericRecord> writerFactory0 = ParquetAvroWriters.forGenericRecord(schema);// 根据调用的方法及传入的信息，来获取avro模式schema，并生成对应的parquetWriter
 
 
@@ -135,26 +136,26 @@ public class _08_SinkOperator_Demos {
         new GenericRecordAvroTypeInfo(schema); */
 
         //// TODO 方式 2： 利用Avro的规范Bean对象，来生成ParquetAvroWriter工厂
-        //ParquetWriterFactory<AvroEventLogBean> writerFactory1 = ParquetAvroWriters.forSpecificRecord(AvroEventLogBean.class);// 需要写avsc文件，并根据文件生成 javaBean，然后该方法可以从这种javabean来自动反射获取 schema
-        //
-        //FileSink<AvroEventLogBean> parquetSink1 = FileSink
-        //    .forBulkFormat(new Path("d:/bulksink/"), writerFactory1)  // 核心点： 要一个parquet文件输出器 writerFactory
-        //    .withBucketAssigner(new DateTimeBucketAssigner<AvroEventLogBean>())  // 分桶策略
-        //    .withBucketCheckInterval(5)   //分桶检查间隔
-        //    .withRollingPolicy(OnCheckpointRollingPolicy.build())  // bulk模式下的文件滚动策略，只有一种： 当 checkpoint发生时，进行文件滚动
-        //    .withOutputFileConfig(OutputFileConfig.builder().withPartSuffix(".parquet").withPartPrefix("doitedu").build())  // 输出文件名的前后缀策略
-        //    .build();
-        //
-        //// 将上面构造好的 sink算子对象，添加到数据流上，进行数据输出
-        //streamSource
-        //    .map(eventLogBean -> {
-        //        HashMap<CharSequence, CharSequence> eventInfo = new HashMap<>();
-        //        for (Map.Entry<String, String> entry : eventLogBean.getEventInfo().entrySet()) {
-        //            eventInfo.put(entry.getKey(), entry.getValue());
-        //        }
-        //        return new AvroEventLogBean(eventLogBean.getGuid(), eventLogBean.getSessionId(), eventLogBean.getEventId(), eventLogBean.getTimeStamp(), eventInfo);
-        //    }).returns(AvroEventLogBean.class)
-        ///*.sinkTo(parquetSink1)*/;
+       /*  ParquetWriterFactory<AvroEventLogBean> writerFactory1 = ParquetAvroWriters.forSpecificRecord(AvroEventLogBean.class);// 需要写avsc文件，并根据文件生成 javaBean，然后该方法可以从这种javabean来自动反射获取 schema
+
+        FileSink<AvroEventLogBean> parquetSink1 = FileSink
+            .forBulkFormat(new Path("d:/bulksink/"), writerFactory1)  // 核心点： 要一个parquet文件输出器 writerFactory
+            .withBucketAssigner(new DateTimeBucketAssigner<AvroEventLogBean>())  // 分桶策略
+            .withBucketCheckInterval(5)   //分桶检查间隔
+            .withRollingPolicy(OnCheckpointRollingPolicy.build())  // bulk模式下的文件滚动策略，只有一种： 当 checkpoint发生时，进行文件滚动
+            .withOutputFileConfig(OutputFileConfig.builder().withPartSuffix(".parquet").withPartPrefix("doitedu").build())  // 输出文件名的前后缀策略
+            .build();
+
+        // 将上面构造好的 sink算子对象，添加到数据流上，进行数据输出
+        streamSource
+            .map(eventLogBean -> {
+                HashMap<CharSequence, CharSequence> eventInfo = new HashMap<>();
+                for (Map.Entry<String, String> entry : eventLogBean.getEventInfo().entrySet()) {
+                    eventInfo.put(entry.getKey(), entry.getValue());
+                }
+                return new AvroEventLogBean(eventLogBean.getGuid(), eventLogBean.getSessionId(), eventLogBean.getEventId(), eventLogBean.getTimeStamp(), eventInfo);
+            }).returns(AvroEventLogBean.class) */
+        /*.sinkTo(parquetSink1)*/;
 
         // TODO 方式 3： 利用Avro的规范Bean对象，来生成ParquetAvroWriter工厂
         ParquetWriterFactory<EventLog> writerFactory2 = ParquetAvroWriters.forReflectRecord(EventLog.class);// 该方法，传入一个普通的JavaBean类，就可以自动通过反射来生成 Schema
@@ -171,6 +172,5 @@ public class _08_SinkOperator_Demos {
 
         env.execute();
 
-        env.execute();
     }
 }
