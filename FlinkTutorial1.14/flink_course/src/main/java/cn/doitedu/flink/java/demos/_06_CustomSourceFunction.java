@@ -66,7 +66,7 @@ class MySourceFunction implements SourceFunction<EventLog>{
         while(flag){
 
             eventLog.setGuid(RandomUtils.nextLong(1, 1000));
-            eventLog.setSessionId(RandomStringUtils.randomAlphabetic(1024).toUpperCase());
+            eventLog.setSessionId(RandomStringUtils.randomAlphabetic(5).toUpperCase());
             eventLog.setTimestamp(System.currentTimeMillis());
             eventLog.setEventId(events[RandomUtils.nextInt(0, events.length)]);
 
@@ -77,7 +77,7 @@ class MySourceFunction implements SourceFunction<EventLog>{
 
             eventInfoMap.clear();
 
-            Thread.sleep(RandomUtils.nextInt(5, 1500));
+            Thread.sleep(RandomUtils.nextInt(1000, 1500));
         }
     }
 
