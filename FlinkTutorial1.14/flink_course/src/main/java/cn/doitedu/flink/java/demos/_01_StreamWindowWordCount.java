@@ -20,9 +20,13 @@ public class _01_StreamWindowWordCount {
         Configuration conf = new Configuration();
         conf.setInteger("rest.port",8081);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
+        env.setParallelism(1);
 
-        SingleOutputStreamOperator<Tuple2<String, Integer>> dataStream = env.socketTextStream("hadoop01", 6666)
+        SingleOutputStreamOperator<Tuple2<String, Integer>> dataStream = env.socketTextStream("localhost", 6666)
+
+            .slotSharingGroup("g1")// 设置槽位共享组
             .flatMap(new Splitter())
+            .slotSharingGroup("g2")
             .keyBy(value -> value.f0)
             .window(TumblingProcessingTimeWindows.of(Time.seconds(5)))
             .sum(1);
