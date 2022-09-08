@@ -16,9 +16,12 @@
  * limitations under the License.
  */
 
-package org.apache.flink.api.common.eventtime;
+package org.apache.flink_test.api.common.eventtime;
 
 import org.apache.flink.annotation.Public;
+import org.apache.flink.api.common.eventtime.Watermark;
+import org.apache.flink.api.common.eventtime.WatermarkGenerator;
+import org.apache.flink.api.common.eventtime.WatermarkOutput;
 
 import java.time.Duration;
 
