@@ -51,8 +51,8 @@ public class BaseLogApp {
         System.setProperty("HADOOP_USER_NAME", "atguigu");
 
         // TODO 2.消费 ods_base_log 主题数据, 创建流
-        String sourceTopic = "ods_base_log";
         String groupId = "ods_dwd_base_log_app";
+        String sourceTopic = "ods_base_log";
         DataStreamSource<String> kafkaDS = env.addSource(MyKafkaUtil.getKafkaConsumer(sourceTopic, groupId));
 
         // TODO 3.将每行数据转换为JSON对象

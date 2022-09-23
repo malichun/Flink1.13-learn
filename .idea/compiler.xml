@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gmall-realtime" />
+        <module name="flink_course" />
+        <module name="datagen" />
+        <module name="flink-cdc" />
+        <module name="FlinkTutorial" />
+        <module name="gmall-logger" />
+        <module name="flume-demo" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="datagen" target="1.8" />
+      <module name="flink-cdc" target="1.8" />
+      <module name="flink_course" target="1.8" />
+      <module name="FlinkTutorial" target="1.8" />
+      <module name="FlinkTutorial1.14" target="1.8" />
+      <module name="flume-demo" target="1.8" />
+      <module name="gmall-logger" target="1.8" />
+      <module name="gmall-realtime" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
