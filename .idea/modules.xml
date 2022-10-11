@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FlinkTutorial/FlinkTutorial.iml" filepath="$PROJECT_DIR$/FlinkTutorial/FlinkTutorial.iml" />
       <module fileurl="file://$PROJECT_DIR$/FlinkTutorial1.14/FlinkTutorial1.14.iml" filepath="$PROJECT_DIR$/FlinkTutorial1.14/FlinkTutorial1.14.iml" />
+      <module fileurl="file://$PROJECT_DIR$/concurrent/concurrent.iml" filepath="$PROJECT_DIR$/concurrent/concurrent.iml" />
       <module fileurl="file://$PROJECT_DIR$/FlinkTutorial1.14/datagen/datagen.iml" filepath="$PROJECT_DIR$/FlinkTutorial1.14/datagen/datagen.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-cdc/flink-cdc.iml" filepath="$PROJECT_DIR$/flink-cdc/flink-cdc.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-learn.iml" filepath="$PROJECT_DIR$/flink-learn.iml" />
@@ -11,6 +12,8 @@
       <module fileurl="file://$PROJECT_DIR$/flume-demo/flume-demo.iml" filepath="$PROJECT_DIR$/flume-demo/flume-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-logger/gmall-logger.iml" filepath="$PROJECT_DIR$/gmall-logger/gmall-logger.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-realtime/gmall-realtime.iml" filepath="$PROJECT_DIR$/gmall-realtime/gmall-realtime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kafka-doit2022/kafka-doit2022.iml" filepath="$PROJECT_DIR$/kafka-doit2022/kafka-doit2022.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spark-doit/spark-doit.iml" filepath="$PROJECT_DIR$/spark-doit/spark-doit.iml" />
     </modules>
   </component>
 </project>
