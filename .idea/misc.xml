@@ -9,6 +9,9 @@
         <option value="$PROJECT_DIR$/gmall-realtime/pom.xml" />
         <option value="$PROJECT_DIR$/flume-demo/pom.xml" />
         <option value="$PROJECT_DIR$/FlinkTutorial1.14/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka-doit2022/pom.xml" />
+        <option value="$PROJECT_DIR$/spark-doit/pom.xml" />
+        <option value="$PROJECT_DIR$/concurrent/pom.xml" />
       </list>
     </option>
   </component>
