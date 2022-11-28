@@ -1,14 +1,14 @@
 package cn.doitedu.spark.day01
 
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+
 
 /**
  * @author malichun
  * @create 2022/11/27 0027 0:32
  */
-object B10_RDD算子_reduceByKey {
+object B11_RDD算子_aggregateByKey {
     def main(args: Array[String]): Unit = {
         Logger.getLogger("org").setLevel(Level.WARN)
 
@@ -20,19 +20,28 @@ object B10_RDD算子_reduceByKey {
 
         val rdd = sc.parallelize(Seq(("a",2), ("b",1),("a",3),("b",4),("c",1),("a",6),("b",6)),2)
 
+        // 需求1: 将相同key的数据进行累加
+        val rdd2 = rdd.aggregateByKey(100)((u, e) => u + e, (u1, u2) => u1 + u2)
 
-        // reduceByKey
-        val rdd2 = rdd.reduceByKey(_ + _)
+        // 需求2,将相同kye的元素聚合成一个List
+        val rdd3 = rdd.aggregateByKey(List[Int]())((u, e) => u.::(e), _ ::: _)
 
-        // 如下这个写法得到的结果与上面的reduceByKey完全相同
-        rdd.groupByKey().map(tp => (tp._1, tp._1.sum))
+//        rdd2.collect().foreach(println)
+        rdd3.foreach(println)
 
         /**
-         * 如果要实现上面的同样的需求, 用reduceByKey比 "用groupByKey后再聚合效率更高"
          *
-         */
+         *aggregate 不byKey
+         * 针对那种非kv结构数据的聚合
+         * 这个算子的初始值, 在分区内局部聚合的时候以及分区间聚合的时候都会使用到
+         *
+          */
+        val rddx = sc.parallelize(Seq(1,1,1,1,1,2,2,2,2,2), 3)
 
-        rdd2 foreach println
+        val res = rddx.aggregate(100)((u,e) => u+e, (u1,u2) =>u1+u2)
+        println(res)//415
+
+
 
     }
 }

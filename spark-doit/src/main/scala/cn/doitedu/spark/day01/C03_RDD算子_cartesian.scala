@@ -7,7 +7,7 @@ import org.apache.spark.{SparkConf, SparkContext}
  * @author malichun
  * @create 2022/11/27 0027 14:16
  */
-object C02_RDD算子_Cogroup {
+object C03_RDD算子_cartesian {
     def main(args: Array[String]): Unit = {
         Logger.getLogger("org").setLevel(Level.WARN)
 
@@ -20,12 +20,9 @@ object C02_RDD算子_Cogroup {
         val rdd1 = sc.parallelize(Seq(("a", 12), ("b", 11), ("a", 13), ("b", 14)), 3)
         val rdd2 = sc.parallelize(Seq(("a", "26"), ("a", "20"), ("b", "25"), ("d", "21")))
 
-        val res = rdd1.cogroup(rdd2)
+        val res = rdd1.cartesian(rdd2)
 
         res.foreach(println)
-        //(d,(CompactBuffer(),CompactBuffer(21)))
-        //(b,(CompactBuffer(11, 14),CompactBuffer(25)))
-        //(a,(CompactBuffer(12, 13),CompactBuffer(26, 20)))
 
         sc.stop()
     }
