@@ -34,6 +34,7 @@ object D02_RDD算子_分区调整 {
         rddkv1
             .partitionBy(new HashPartitioner(3)) // HashPartitioner 是将key的hashCode%分区数 来决定一条数据该分到哪个分区
 
+        // 如果key是一个复杂对象, 而且要按对象中的某个属性来分区, 则需要自己写分区逻辑
         rddkv2
             .partitionBy(new OrderPartitioner(2))
 
@@ -41,8 +42,12 @@ object D02_RDD算子_分区调整 {
     }
 }
 
-class OrderPartitioner(val num:Int) extends Partitioner{
+class OrderPartitioner(val num:Int) extends HashPartitioner(num) {
     override def numPartitions: Int = num
 
-    override def getPartition(key: Any): Int = key.asInstanceOf[Order].id % num
+    override def getPartition(key: Any): Int = {
+        val od = key.asInstanceOf[Order]
+        Math.abs(od.id.hashCode() % numPartitions)
+        super.getPartition(od.id)
+    }
 }
