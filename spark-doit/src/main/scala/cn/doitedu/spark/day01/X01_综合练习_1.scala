@@ -75,7 +75,8 @@ object X01_综合练习_1 {
                 } else {
                     t2
                 }
-            }).foreach(println)
+            }).foreach(println(_))
+
 
 
             sc.stop()
