@@ -1,6 +1,6 @@
 package cn.doitedu.spark.util
 
-import cn.doitedu.spark.day01.IpRule
+import cn.doitedu.spark.demos.IpRule
 
 import scala.annotation.tailrec
 

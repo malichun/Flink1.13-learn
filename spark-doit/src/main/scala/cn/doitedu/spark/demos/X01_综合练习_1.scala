@@ -1,4 +1,4 @@
-package cn.doitedu.spark.day01
+package cn.doitedu.spark.demos
 
 import com.alibaba.fastjson.JSON
 import org.apache.spark.{SparkConf, SparkContext}

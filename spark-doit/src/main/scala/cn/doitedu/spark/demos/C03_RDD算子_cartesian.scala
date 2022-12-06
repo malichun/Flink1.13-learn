@@ -1,4 +1,4 @@
-package cn.doitedu.spark.day01
+package cn.doitedu.spark.demos
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.{SparkConf, SparkContext}
