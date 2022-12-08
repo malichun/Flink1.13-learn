@@ -22,17 +22,21 @@ object B10_RDD算子_reduceByKey {
 
 
         // reduceByKey
-        val rdd2 = rdd.reduceByKey(_ + _)
+//        val rdd2 = rdd.reduceByKey(_ + _)
 
         // 如下这个写法得到的结果与上面的reduceByKey完全相同
-        rdd.groupByKey().map(tp => (tp._1, tp._1.sum))
+//        rdd.groupByKey().map(tp => (tp._1, tp._1.sum))
+        rdd.repartition(2).reduceByKey(_+_).reduceByKey(_+_).collect().foreach(println)
+
 
         /**
          * 如果要实现上面的同样的需求, 用reduceByKey比 "用groupByKey后再聚合效率更高"
          *
          */
 
-        rdd2 foreach println
+//        rdd2 foreach println
 
+        Thread.sleep(30000000)
+        sc.stop
     }
 }
