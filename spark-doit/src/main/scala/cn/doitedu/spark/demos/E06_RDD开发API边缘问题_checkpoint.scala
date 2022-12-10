@@ -1,6 +1,9 @@
 package cn.doitedu.spark.demos
 
 import cn.doitedu.spark.util.SparkContextUtil
+import org.apache.hadoop.io.{LongWritable, Text}
+import org.apache.hadoop.mapred.lib.CombineTextInputFormat
+import org.apache.spark.rdd.HadoopRDD
 
 /**
  * checkpoint , 就是把RDD持久化
@@ -10,7 +13,10 @@ object E06_RDD开发API边缘问题_checkpoint {
     def main(args: Array[String]): Unit = {
         val sc = SparkContextUtil.getSc("checkpoint演示")
         sc.setCheckpointDir("file:///c:/data/123")
+        sc.textFile("")
 
+        // 小文件问题
+        val rddCombine = sc.hadoopFile("path",classOf[CombineTextInputFormat],classOf[LongWritable],classOf[Text],2)
 
         val rdd = sc.parallelize(1 to 10000)
 
