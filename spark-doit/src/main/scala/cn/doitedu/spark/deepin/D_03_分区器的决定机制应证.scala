@@ -2,9 +2,7 @@ package cn.doitedu.spark.deepin
 
 import org.apache.spark.{HashPartitioner, Partitioner, SparkConf, SparkContext}
 
-case class Stu(id:Int, name:String, gender:String, score:Double){
-
-}
+case class Stu(id:Int, name:String, gender:String, score:Double)
 
 object D_03_分区器的决定机制应证 {
     def main(args: Array[String]): Unit = {
@@ -25,10 +23,10 @@ object D_03_分区器的决定机制应证 {
         // shuffle所产生的RDD通常都有分区器, 而且默认分区器都是HashPartitioner
         val rdd31 = rdd2.reduceByKey(_+_,3) //reduceByKey(new HashPartitioner(numPartitions), func)
         val rdd32 = rdd2.reduceByKey(new HashPartitioner(3),_+_)
-        val rdd3 = rdd2.reduceByKey(_+_) // reduceByKey(defaultPartitioner(self), func)
+        val rdd3 = rdd2.reduceByKey(_+_) // reduceByKey(defaultPartitioner(self), func), 这边是4
 
         println(rdd3.partitioner)  // Some(org.apache.spark.HashPartitioner@4)
-
+        println("没传任何分区数相关参数的reduceByKey的分区数结果过: "+rdd3.partitioner.get.numPartitions)  // 4
 
 
 
